@@ -57,10 +57,10 @@ export default defineConfig({
           scope: ".",
           start_url: ".",
           id: ".",
-          short_name: "MNM - ייבוא שיווק והפצה",
-          name: "MNM - ייבוא שיווק והפצה",
+          short_name: "שוברים שוק",
+          name: "שוברים שוק",
           description:
-            "MNM - ייבוא שיווק והפצה",
+            "שוברים שוק",
           icons: [
             {
               src: "favicon.ico",

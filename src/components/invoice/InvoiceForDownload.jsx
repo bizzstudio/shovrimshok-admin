@@ -347,7 +347,7 @@ const InvoiceForDownload = ({
               >
                 <Image
                   src={logoDark}
-                  alt="MNM - ייבוא שיווק והפצה"
+                  alt="שוברים שוק"
                   style={{
                     width: 90,
                     alignItems: "right",

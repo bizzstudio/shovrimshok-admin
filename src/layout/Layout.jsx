@@ -23,16 +23,16 @@ const Layout = () => {
 
   useEffect(() => {
     if (pageTitle) {
-      document.title = `${t(pageTitle)} | MNM - ייבוא שיווק והפצה`;
+      document.title = `${t(pageTitle)} | שוברים שוק`;
       return;
     }
     const currentRoute = routes.find(route =>
       matchPath({ path: route.path, end: true }, location.pathname)
     );
     if (currentRoute?.title) {
-      document.title = `${t(currentRoute.title)} | MNM - ייבוא שיווק והפצה`;
+      document.title = `${t(currentRoute.title)} | שוברים שוק`;
     } else {
-      document.title = "MNM - ייבוא שיווק והפצה";
+      document.title = "שוברים שוק";
     }
   }, [pageTitle, location.pathname]);
 

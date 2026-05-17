@@ -7,15 +7,15 @@ const PageTitle = ({ title, description }) => {
       <title>
         {" "}
         {title
-          ? ` ${title} | MNM יבוא שיווק והפצה : Point of Sale and E-Commerce Website all in one`
-          : "MNM יבוא שיווק והפצה : Point of Sale and E-Commerce Website all in one"}
+          ? ` ${title} | שוברים שוק : Point of Sale and E-Commerce Website all in one`
+          : "שוברים שוק : Point of Sale and E-Commerce Website all in one"}
       </title>
       <meta
         name="description"
         content={
           description
             ? ` ${description} `
-            : "MNM יבוא שיווק והפצה : Point of Sale and E-Commerce Website all in one"
+            : "שוברים שוק : Point of Sale and E-Commerce Website all in one"
         }
       />
     </Helmet>

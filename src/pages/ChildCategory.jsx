@@ -115,7 +115,7 @@ const ChildCategory = () => {
     <div className="w-full h-fit flex flex-col lg:px-20 sm:px-4 px-5 mx-auto overflow-x-hidden">
       <PageTitle>{t("CategoryPageTitle")}</PageTitle>
 
-      <DeleteModal ids={allId} setIsCheck={setIsCheck} category />
+      <DeleteModal ids={allId} id={serviceId} title={title} setIsCheck={setIsCheck} category />
 
       {/* <BulkActionDrawer
         ids={allId}

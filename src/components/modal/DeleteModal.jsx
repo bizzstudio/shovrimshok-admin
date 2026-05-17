@@ -80,7 +80,7 @@ const DeleteModal = ({ id, ids, setIsCheck, category, title, useParamId }) => {
       }
 
       if (location.pathname === "/categories" || category) {
-        if (ids) {
+        if (ids?.length) {
           //  console.log('delete modal categorices',ids)
           const res = await CategoryServices.deleteManyCategory({
             ids: ids,

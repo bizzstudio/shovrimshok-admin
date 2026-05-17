@@ -47,7 +47,7 @@ const App = () => {
             <Route
               path="/"
               element={
-                adminInfo?.email ? <Navigate to="/dashboard" replace /> : <Login />
+                adminInfo?.email ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
               }
             />
 

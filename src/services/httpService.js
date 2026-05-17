@@ -6,7 +6,9 @@ const instance = axios.create({
   timeout: 50000,
   headers: {
     Accept: "application/json",
-    "Content-Type": "application/json",
+    // Content-Type נשמט בכוונה — Axios קובע אותו אוטומטית:
+    // application/json לאובייקטים, multipart/form-data+boundary ל-FormData.
+    // ברירת מחדל קשיחה שוברת העלאות multipart ב-Axios 1.x.
   },
 });
 
@@ -30,6 +32,7 @@ instance.interceptors.request.use(function (config) {
   return {
     ...config,
     headers: {
+      ...config.headers,
       authorization: adminInfo ? `Bearer ${adminInfo.token}` : null,
       company: company ? company : null,
     },
