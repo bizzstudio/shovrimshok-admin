@@ -1,7 +1,7 @@
 {
-  "name": "MNM - ייבוא שיווק והפצה-admin",
+  "name": "שוברים שוק-admin",
   "version": "0.1.0",
-  "description": "this is MNM - ייבוא שיווק והפצה-admin built with react.js and tailwindcss",
+  "description": "this is שוברים שוק-admin built with react.js and tailwindcss",
   "private": true,
   "type": "module",
   "dependencies": {

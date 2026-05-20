@@ -77,6 +77,8 @@ const HomePage = ({ storeHomeProps }) => {
     footerBlock3,
     setFooterBlock4,
     footerBlock4,
+    setFooterBlock5,
+    footerBlock5,
     setFooterSocialLinks,
     footerSocialLinks,
     setFooterPaymentMethod,
@@ -2251,6 +2253,93 @@ const HomePage = ({ storeHomeProps }) => {
                   <Error errorName={errors.footer_block_two_link_four} />
                 </div>
               </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 5
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_two_link_five_title"
+                    type="text"
+                    placeholder={t("Link") + " 5"}
+                  />
+                  <Error errorName={errors.footer_block_two_link_five_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_two_link_five"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_two_link_five} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 6
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_two_link_six_title"
+                    type="text"
+                    placeholder={t("Link") + " 6"}
+                  />
+                  <Error errorName={errors.footer_block_two_link_six_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_two_link_six"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_two_link_six} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 7
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_two_link_seven_title"
+                    type="text"
+                    placeholder={t("Link") + " 7"}
+                  />
+                  <Error errorName={errors.footer_block_two_link_seven_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_two_link_seven"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_two_link_seven} />
+                </div>
+              </div>
             </div>
 
             <div className="inline-flex md:text-base text-sm mb-3 text-gray-500 dark:text-gray-400 relative md:mt-0 mt-24">
@@ -2414,6 +2503,282 @@ const HomePage = ({ storeHomeProps }) => {
                     placeholder={t("Link")}
                   />
                   <Error errorName={errors.footer_block_three_link_four} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 5
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_three_link_five_title"
+                    type="text"
+                    placeholder={t("Link") + " 5"}
+                  />
+                  <Error errorName={errors.footer_block_three_link_five_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_three_link_five"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_three_link_five} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 6
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_three_link_six_title"
+                    type="text"
+                    placeholder={t("Link") + " 6"}
+                  />
+                  <Error errorName={errors.footer_block_three_link_six_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_three_link_six"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_three_link_six} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 7
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_three_link_seven_title"
+                    type="text"
+                    placeholder={t("Link") + " 7"}
+                  />
+                  <Error errorName={errors.footer_block_three_link_seven_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_three_link_seven"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_three_link_seven} />
+                </div>
+              </div>
+            </div>
+
+            <div className="inline-flex md:text-base text-sm mb-3 text-gray-500 dark:text-gray-400 relative md:mt-0 mt-24">
+              <strong>{t("Block")} 5</strong>
+            </div>
+            <hr className="md:mb-12 mb-3" />
+            <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-3">
+              <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                {t("EnableThisBlock")}
+              </label>
+              <div className="sm:col-span-4">
+                <SwitchToggle
+                  title=""
+                  handleProcess={setFooterBlock5}
+                  processOption={footerBlock5}
+                  name={footerBlock5}
+                />
+              </div>
+            </div>
+
+            <div
+              style={{
+                height: footerBlock5 ? "auto" : 0,
+                transition: "all 0.5s",
+                visibility: !footerBlock5 ? "hidden" : "visible",
+                opacity: !footerBlock5 ? "0" : "1",
+              }}
+            >
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-3">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Title")}
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_title"
+                    type="text"
+                    placeholder={t("Title")}
+                  />
+                  <Error errorName={errors.footer_block_five_title} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 1
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_one_title"
+                    type="text"
+                    placeholder={t("Link") + " 1"}
+                  />
+                  <Error errorName={errors.footer_block_five_link_one_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_one"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_five_link_one} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 2
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_two_title"
+                    type="text"
+                    placeholder={t("Link") + " 2"}
+                  />
+                  <Error errorName={errors.footer_block_five_link_two_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_two"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_five_link_two} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 3
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_three_title"
+                    type="text"
+                    placeholder={t("Link") + " 3"}
+                  />
+                  <Error errorName={errors.footer_block_five_link_three_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_three"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_five_link_three} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 4
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_four_title"
+                    type="text"
+                    placeholder={t("Link") + " 4"}
+                  />
+                  <Error errorName={errors.footer_block_five_link_four_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_four"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_five_link_four} />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-5 sm:grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 md:mb-6 mb-1">
+                <label className="block md:text-sm md:col-span-1 sm:col-span-2 text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">
+                  {t("Link")} 5
+                </label>
+                <div className="sm:col-span-4">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_five_title"
+                    type="text"
+                    placeholder={t("Link") + " 5"}
+                  />
+                  <Error errorName={errors.footer_block_five_link_five_title} />
+                </div>
+                <label className="md:col-span-1 sm:col-span-2"></label>
+                <div className="sm:col-span-4  mb-5">
+                  <InputAreaTwo
+                    required
+                    register={register}
+                    label="Title"
+                    name="footer_block_five_link_five"
+                    type="text"
+                    placeholder={t("Link")}
+                  />
+                  <Error errorName={errors.footer_block_five_link_five} />
                 </div>
               </div>
             </div>

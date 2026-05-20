@@ -263,7 +263,7 @@ const CustomerPersonalDetails = ({ customer, customerId }) => {
                                                             setImageUrl={(url) =>
                                                                 setValue(`subCustomers.${idx}.image`, url, { shouldDirty: true })
                                                             }
-                                                            folder="mnm customers"
+                                                            folder="shovrimshok customers"
                                                             size="medium"
                                                         />
                                                     </div>

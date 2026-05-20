@@ -39,6 +39,7 @@ const useStoreHomeSubmit = () => {
   const [footerBlock2, setFooterBlock2] = useState(true);
   const [footerBlock3, setFooterBlock3] = useState(true);
   const [footerBlock4, setFooterBlock4] = useState(true);
+  const [footerBlock5, setFooterBlock5] = useState(true);
   const [footerSocialLinks, setFooterSocialLinks] = useState(true);
   const [footerPaymentMethod, setFooterPaymentMethod] = useState(true);
   const [footerBottomContact, setFooterBottomContact] = useState(true);
@@ -860,6 +861,7 @@ const useStoreHomeSubmit = () => {
             block2_status: footerBlock2,
             block3_status: footerBlock3,
             block4_status: footerBlock4,
+            block5_status: footerBlock5,
             payment_method_status: footerPaymentMethod,
             bottom_contact_status: footerBottomContact,
             social_links_status: footerSocialLinks,
@@ -939,6 +941,24 @@ const useStoreHomeSubmit = () => {
             },
             block2_sub_link4: data.footer_block_two_link_four,
 
+            block2_sub_title5: {
+              ...resData?.footer?.block2_sub_title5,
+              [language]: data.footer_block_two_link_five_title || "",
+            },
+            block2_sub_link5: data.footer_block_two_link_five,
+
+            block2_sub_title6: {
+              ...resData?.footer?.block2_sub_title6,
+              [language]: data.footer_block_two_link_six_title || "",
+            },
+            block2_sub_link6: data.footer_block_two_link_six,
+
+            block2_sub_title7: {
+              ...resData?.footer?.block2_sub_title7,
+              [language]: data.footer_block_two_link_seven_title || "",
+            },
+            block2_sub_link7: data.footer_block_two_link_seven,
+
             block3_title: {
               ...resData?.footer?.block3_title,
               [language]: data.footer_block_three_title || "",
@@ -967,6 +987,54 @@ const useStoreHomeSubmit = () => {
               [language]: data.footer_block_three_link_four_title || "",
             },
             block3_sub_link4: data.footer_block_three_link_four,
+
+            block3_sub_title5: {
+              ...resData?.footer?.block3_sub_title5,
+              [language]: data.footer_block_three_link_five_title || "",
+            },
+            block3_sub_link5: data.footer_block_three_link_five,
+
+            block3_sub_title6: {
+              ...resData?.footer?.block3_sub_title6,
+              [language]: data.footer_block_three_link_six_title || "",
+            },
+            block3_sub_link6: data.footer_block_three_link_six,
+
+            block3_sub_title7: {
+              ...resData?.footer?.block3_sub_title7,
+              [language]: data.footer_block_three_link_seven_title || "",
+            },
+            block3_sub_link7: data.footer_block_three_link_seven,
+
+            block5_title: {
+              ...resData?.footer?.block5_title,
+              [language]: data.footer_block_five_title || "",
+            },
+            block5_sub_title1: {
+              ...resData?.footer?.block5_sub_title1,
+              [language]: data.footer_block_five_link_one_title || "",
+            },
+            block5_sub_link1: data.footer_block_five_link_one,
+            block5_sub_title2: {
+              ...resData?.footer?.block5_sub_title2,
+              [language]: data.footer_block_five_link_two_title || "",
+            },
+            block5_sub_link2: data.footer_block_five_link_two,
+            block5_sub_title3: {
+              ...resData?.footer?.block5_sub_title3,
+              [language]: data.footer_block_five_link_three_title || "",
+            },
+            block5_sub_link3: data.footer_block_five_link_three,
+            block5_sub_title4: {
+              ...resData?.footer?.block5_sub_title4,
+              [language]: data.footer_block_five_link_four_title || "",
+            },
+            block5_sub_link4: data.footer_block_five_link_four,
+            block5_sub_title5: {
+              ...resData?.footer?.block5_sub_title5,
+              [language]: data.footer_block_five_link_five_title || "",
+            },
+            block5_sub_link5: data.footer_block_five_link_five,
 
             footer_block_four_link_one: data.footer_block_four_link_one,
             block4_logo: footerLogo,
@@ -1400,6 +1468,7 @@ const useStoreHomeSubmit = () => {
           setFooterBlock2(res?.footer?.block2_status);
           setFooterBlock3(res?.footer?.block3_status);
           setFooterBlock4(res?.footer?.block4_status);
+          setFooterBlock5(res?.footer?.block5_status);
           setFooterLogo(res?.footer?.block4_logo);
           setPaymentImage(res?.footer?.payment_method_img);
           setFooterSocialLinks(res?.footer?.social_links_status);
@@ -1478,6 +1547,22 @@ const useStoreHomeSubmit = () => {
             res?.footer?.block2_sub_title4?.[language || "he"]
           );
 
+          setValue("footer_block_two_link_five", res?.footer?.block2_sub_link5);
+          setValue("footer_block_two_link_six", res?.footer?.block2_sub_link6);
+          setValue("footer_block_two_link_seven", res?.footer?.block2_sub_link7);
+          setValue(
+            "footer_block_two_link_five_title",
+            res?.footer?.block2_sub_title5?.[language || "he"]
+          );
+          setValue(
+            "footer_block_two_link_six_title",
+            res?.footer?.block2_sub_title6?.[language || "he"]
+          );
+          setValue(
+            "footer_block_two_link_seven_title",
+            res?.footer?.block2_sub_title7?.[language || "he"]
+          );
+
           setValue(
             "footer_block_three_title",
             res?.footer?.block3_title?.[language || "he"]
@@ -1514,6 +1599,61 @@ const useStoreHomeSubmit = () => {
           setValue(
             "footer_block_three_link_four_title",
             res?.footer?.block3_sub_title4?.[language || "he"]
+          );
+
+          setValue(
+            "footer_block_three_link_five",
+            res?.footer?.block3_sub_link5
+          );
+          setValue(
+            "footer_block_three_link_six",
+            res?.footer?.block3_sub_link6
+          );
+          setValue(
+            "footer_block_three_link_seven",
+            res?.footer?.block3_sub_link7
+          );
+          setValue(
+            "footer_block_three_link_five_title",
+            res?.footer?.block3_sub_title5?.[language || "he"]
+          );
+          setValue(
+            "footer_block_three_link_six_title",
+            res?.footer?.block3_sub_title6?.[language || "he"]
+          );
+          setValue(
+            "footer_block_three_link_seven_title",
+            res?.footer?.block3_sub_title7?.[language || "he"]
+          );
+
+          setValue(
+            "footer_block_five_title",
+            res?.footer?.block5_title?.[language || "he"]
+          );
+          setValue("footer_block_five_link_one", res?.footer?.block5_sub_link1);
+          setValue("footer_block_five_link_two", res?.footer?.block5_sub_link2);
+          setValue("footer_block_five_link_three", res?.footer?.block5_sub_link3);
+          setValue("footer_block_five_link_four", res?.footer?.block5_sub_link4);
+          setValue("footer_block_five_link_five", res?.footer?.block5_sub_link5);
+          setValue(
+            "footer_block_five_link_one_title",
+            res?.footer?.block5_sub_title1?.[language || "he"]
+          );
+          setValue(
+            "footer_block_five_link_two_title",
+            res?.footer?.block5_sub_title2?.[language || "he"]
+          );
+          setValue(
+            "footer_block_five_link_three_title",
+            res?.footer?.block5_sub_title3?.[language || "he"]
+          );
+          setValue(
+            "footer_block_five_link_four_title",
+            res?.footer?.block5_sub_title4?.[language || "he"]
+          );
+          setValue(
+            "footer_block_five_link_five_title",
+            res?.footer?.block5_sub_title5?.[language || "he"]
           );
 
           setValue(
@@ -1951,6 +2091,8 @@ const useStoreHomeSubmit = () => {
     footerBlock3,
     setFooterBlock4,
     footerBlock4,
+    setFooterBlock5,
+    footerBlock5,
     setFooterSocialLinks,
     footerSocialLinks,
     setFooterPaymentMethod,
