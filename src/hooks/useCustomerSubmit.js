@@ -18,6 +18,7 @@ const emptyAddress = {
   postalCode: "",
 };
 
+// מבנה ריק לתת-לקוח גלוי (לכפתור "הוסף תת-לקוח")
 const createEmptySubCustomer = () => ({
   _id: undefined,
   name: "",
@@ -33,6 +34,98 @@ const createEmptySubCustomer = () => ({
   alertPeriod: "",
   address: { ...emptyAddress },
 });
+
+// מבנה ריק ל-primaryDetails (השדות שמוצגים על "הלקוח הראשי" כשאין תתי-לקוחות גלויים)
+const createEmptyPrimaryDetails = () => ({
+  _id: undefined,
+  image: "",
+  creditLimit: 0,
+  weeklyDeliveryDay: "",
+  rivhitCustomerNumber: "",
+  newPassword: "",
+  alertAmount: "",
+  alertPeriod: "",
+  address: { ...emptyAddress },
+});
+
+// המרת Customer (מהשרת) למבנה תואם טופס - משמש גם ל-primary וגם ל-sub-customers
+const customerToFormShape = (sc) => ({
+  _id: sc?._id,
+  name: sc?.name || "",
+  lastName: sc?.lastName || "",
+  email: sc?.email || "",
+  phone: sc?.phone || "",
+  image: sc?.image || "",
+  creditLimit: sc?.creditLimit || 0,
+  weeklyDeliveryDay:
+    sc?.weeklyDeliveryDay !== undefined && sc?.weeklyDeliveryDay !== null
+      ? String(sc.weeklyDeliveryDay)
+      : "",
+  rivhitCustomerNumber: sc?.accounting?.externalCustomerId
+    ? String(sc.accounting.externalCustomerId)
+    : "",
+  newPassword: "",
+  alertAmount: sc?.alertAmount != null ? String(sc.alertAmount) : "",
+  alertPeriod: sc?.alertPeriod || "",
+  address:
+    sc?.address && typeof sc.address === "object"
+      ? {
+        city: sc.address.city || null,
+        street: sc.address.street || "",
+        houseNumber: sc.address.houseNumber || "",
+        apartmentNumber: sc.address.apartmentNumber || "",
+        floor: sc.address.floor || "",
+        entryCode: sc.address.entryCode || "",
+        postalCode: sc.address.postalCode || "",
+      }
+      : { ...emptyAddress },
+});
+
+// בניית payload אחיד מנתוני טופס (משמש גם ל-primaryDetails וגם לתתי-לקוחות גלויים)
+const buildCustomerPayload = (formData, { includeNameEmail }) => {
+  const address =
+    formData.address && typeof formData.address === "object"
+      ? {
+        city: formData.address.city || undefined,
+        street: formData.address.street || undefined,
+        houseNumber: formData.address.houseNumber || undefined,
+        apartmentNumber: formData.address.apartmentNumber || undefined,
+        floor: formData.address.floor || undefined,
+        entryCode: formData.address.entryCode || undefined,
+        postalCode: formData.address.postalCode || undefined,
+      }
+      : {};
+
+  const payload = {
+    ...(formData._id ? { _id: formData._id } : {}),
+    image: formData.image || "",
+    address,
+    creditLimit: Number(formData.creditLimit || 0),
+    weeklyDeliveryDay:
+      formData.weeklyDeliveryDay !== "" && formData.weeklyDeliveryDay !== undefined && formData.weeklyDeliveryDay !== null
+        ? Number(formData.weeklyDeliveryDay)
+        : undefined,
+    alertAmount: formData.alertAmount !== "" && formData.alertAmount != null ? Number(formData.alertAmount) : null,
+    alertPeriod: ["weekly", "monthly"].includes(formData.alertPeriod) ? formData.alertPeriod : null,
+  };
+
+  if (includeNameEmail) {
+    payload.name = formData.name;
+    payload.lastName = formData.lastName || "";
+    payload.email = String(formData.email).toLowerCase();
+    payload.phone = formData.phone || "";
+  }
+
+  if (formData.newPassword && String(formData.newPassword).trim()) {
+    payload.password = formData.newPassword;
+  }
+
+  // תמיד שולחים externalCustomerId (מספר או null) - כדי שהשרת יוכל לנקות ערך קיים
+  const rivhitTrimmed = formData.rivhitCustomerNumber != null ? String(formData.rivhitCustomerNumber).trim() : "";
+  payload.externalCustomerId = rivhitTrimmed ? Number(rivhitTrimmed) : null;
+
+  return payload;
+};
 
 const useCustomerSubmit = (customerId, customer) => {
   const { t } = useTranslation();
@@ -57,42 +150,20 @@ const useCustomerSubmit = (customerId, customer) => {
     return getDefaultPriceListId();
   };
 
-  const getDefaultValues = () => {
-    const normalizedSubCustomers = Array.isArray(customer?.subCustomers)
-      ? customer.subCustomers.map((sc) => ({
-        _id: sc?._id,
-        name: sc?.name || "",
-        lastName: sc?.lastName || "",
-        email: sc?.email || "",
-        phone: sc?.phone || "",
-        image: sc?.image || "",
-        creditLimit: sc?.creditLimit || 0,
-        weeklyDeliveryDay:
-          sc?.weeklyDeliveryDay !== undefined && sc?.weeklyDeliveryDay !== null
-            ? String(sc.weeklyDeliveryDay)
-            : "",
-        rivhitCustomerNumber: sc?.accounting?.externalCustomerId
-          ? String(sc.accounting.externalCustomerId)
-          : "",
-        newPassword: "",
-        alertAmount: sc?.alertAmount != null ? String(sc.alertAmount) : "",
-        alertPeriod: sc?.alertPeriod || "",
-        address:
-          sc?.address && typeof sc.address === "object"
-            ? {
-              city: sc.address.city || null,
-              street: sc.address.street || "",
-              houseNumber: sc.address.houseNumber || "",
-              apartmentNumber: sc.address.apartmentNumber || "",
-              floor: sc.address.floor || "",
-              entryCode: sc.address.entryCode || "",
-              postalCode: sc.address.postalCode || "",
-            }
-            : { ...emptyAddress },
-      }))
-      : [];
+  // הפרדה של תתי-לקוחות לקבוצות: primary (יחיד, מוסתר) ו-visible (השאר)
+  const splitSubCustomers = (allSubCustomers) => {
+    const list = Array.isArray(allSubCustomers) ? allSubCustomers : [];
+    const primary = list.find((sc) => sc?.isPrimary) || null;
+    const visible = list.filter((sc) => !sc?.isPrimary);
+    return { primary, visible };
+  };
 
+  const getDefaultValues = () => {
     if (customer) {
+      // עדיפות ל-primarySubCustomer שמוחזר במפורש מהשרת; fallback לחיפוש בתוך subCustomers
+      const primaryFromServer = customer.primarySubCustomer || splitSubCustomers(customer.subCustomers).primary;
+      const visibleSubCustomers = splitSubCustomers(customer.subCustomers).visible.map(customerToFormShape);
+
       return {
         // MainCustomer fields
         name: customer.name || "",
@@ -107,8 +178,13 @@ const useCustomerSubmit = (customerId, customer) => {
           ? String(customer.externalCustomerId)
           : "",
 
-        // Sub customers
-        subCustomers: normalizedSubCustomers.length > 0 ? normalizedSubCustomers : [createEmptySubCustomer()],
+        // התת-לקוח המוסתר (שדותיו מוצגים כשדות של הלקוח הראשי)
+        primaryDetails: primaryFromServer
+          ? customerToFormShape(primaryFromServer)
+          : createEmptyPrimaryDetails(),
+
+        // תתי-לקוחות גלויים בלבד
+        subCustomers: visibleSubCustomers,
       };
     }
 
@@ -122,7 +198,8 @@ const useCustomerSubmit = (customerId, customer) => {
       priceList: getDefaultPriceListId(),
       paymentTerms: "current",
       mainRivhitCustomerNumber: "",
-      subCustomers: [createEmptySubCustomer()],
+      primaryDetails: createEmptyPrimaryDetails(),
+      subCustomers: [],
     };
   };
 
@@ -138,7 +215,7 @@ const useCustomerSubmit = (customerId, customer) => {
     defaultValues: getDefaultValues(),
   });
 
-  const { fields: subCustomerFields, append, remove, replace } = useFieldArray({
+  const { fields: subCustomerFields, append, remove } = useFieldArray({
     control,
     name: "subCustomers",
   });
@@ -151,6 +228,8 @@ const useCustomerSubmit = (customerId, customer) => {
     [customerType]
   );
 
+  const hasVisibleSubCustomers = subCustomerFields.length > 0;
+
   // סוג לקוח קבוע: מוסדי – בחירת מחירון ברירת מחדל
   useEffect(() => {
     if (priceLists && priceLists.length > 0 && (!currentPriceList || currentPriceList === null)) {
@@ -160,18 +239,6 @@ const useCustomerSubmit = (customerId, customer) => {
       }
     }
   }, [priceLists, currentPriceList, setValue]);
-
-  // אם סוג הלקוח הוא לא עסקי/מוסדי - מוודאים שיש רק תת-לקוח אחד
-  useEffect(() => {
-    const currentSubCustomers = watch("subCustomers") || [];
-    if (!isBusinessOrInstitutional && currentSubCustomers.length > 1) {
-      replace([currentSubCustomers[0]]);
-    }
-    if (currentSubCustomers.length === 0) {
-      replace([createEmptySubCustomer()]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isBusinessOrInstitutional]);
 
   // טעינת נתונים ראשוניים
   useEffect(() => {
@@ -188,7 +255,6 @@ const useCustomerSubmit = (customerId, customer) => {
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
-      // סוג לקוח קבוע: לקוח מוסדי (שדה מושבת ב-UI)
       data.customerType = data.customerType || "institutional";
 
       // מחירון
@@ -202,50 +268,15 @@ const useCustomerSubmit = (customerId, customer) => {
         finalPriceList = null;
       }
 
+      // primaryDetails - תמיד נשלח (גם כשיש תתי-לקוחות גלויים, כדי שלא נאבד את פרטיו הקיימים).
+      // ה-backend מתעלם מ-name/email/phone של primary - מסונכרנים אוטומטית עם MainCustomer.
+      const primaryDetailsPayload = buildCustomerPayload(data.primaryDetails || {}, { includeNameEmail: false });
+
+      // תתי-לקוחות גלויים בלבד
       const subCustomersToSend = Array.isArray(data.subCustomers)
         ? data.subCustomers
           .filter((sc) => sc && sc.name && sc.email)
-          .map((sc) => {
-            const address =
-              sc.address && typeof sc.address === "object"
-                ? {
-                  city: sc.address.city || undefined,
-                  street: sc.address.street || undefined,
-                  houseNumber: sc.address.houseNumber || undefined,
-                  apartmentNumber: sc.address.apartmentNumber || undefined,
-                  floor: sc.address.floor || undefined,
-                  entryCode: sc.address.entryCode || undefined,
-                  postalCode: sc.address.postalCode || undefined,
-                }
-                : {};
-
-            const payload = {
-              ...(sc._id ? { _id: sc._id } : {}),
-              name: sc.name,
-              lastName: sc.lastName || "",
-              email: String(sc.email).toLowerCase(),
-              phone: sc.phone || "",
-              image: sc.image || "",
-              address,
-              creditLimit: Number(sc.creditLimit || 0),
-              weeklyDeliveryDay:
-                sc.weeklyDeliveryDay !== "" && sc.weeklyDeliveryDay !== undefined && sc.weeklyDeliveryDay !== null
-                  ? Number(sc.weeklyDeliveryDay)
-                  : undefined,
-              alertAmount: sc.alertAmount !== "" && sc.alertAmount != null ? Number(sc.alertAmount) : null,
-              alertPeriod: ["weekly", "monthly"].includes(sc.alertPeriod) ? sc.alertPeriod : null,
-            };
-
-            if (sc.newPassword && String(sc.newPassword).trim()) {
-              payload.password = sc.newPassword;
-            }
-
-            // תמיד שולחים externalCustomerId: מספר כשיש ערך, null כשהריק – כדי שהשרת יוכל לנקות ערך קיים
-            const rivhitTrimmed = sc.rivhitCustomerNumber != null ? String(sc.rivhitCustomerNumber).trim() : "";
-            payload.externalCustomerId = rivhitTrimmed ? Number(rivhitTrimmed) : null;
-
-            return payload;
-          })
+          .map((sc) => buildCustomerPayload(sc, { includeNameEmail: true }))
         : [];
 
       const mainCustomerData = {
@@ -257,6 +288,7 @@ const useCustomerSubmit = (customerId, customer) => {
         priceList: finalPriceList,
         paymentTerms: data.paymentTerms,
         institutionType: data.institutionType || undefined,
+        primaryDetails: primaryDetailsPayload,
         subCustomers: subCustomersToSend,
       };
 
@@ -295,11 +327,7 @@ const useCustomerSubmit = (customerId, customer) => {
   };
 
   const appendSubCustomer = () => append(createEmptySubCustomer());
-  const removeSubCustomer = (index) => {
-    const current = watch("subCustomers") || [];
-    if (current.length <= 1) return;
-    remove(index);
-  };
+  const removeSubCustomer = (index) => remove(index);
 
   return {
     register,
@@ -318,6 +346,7 @@ const useCustomerSubmit = (customerId, customer) => {
     appendSubCustomer,
     removeSubCustomer,
     isBusinessOrInstitutional,
+    hasVisibleSubCustomers,
   };
 };
 

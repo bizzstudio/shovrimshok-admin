@@ -123,7 +123,7 @@ const DeliveryNoteForm = ({ customer, onSuccess, variant = "default" }) => {
                                         ₪{order.total?.toFixed(2)}
                                     </div>
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        {order.cart?.length || 0} {t("items")}
+                                        {order.cartCount ?? order.cart?.length ?? 0} {t("items")}
                                     </div>
                                 </div>
                             </label>

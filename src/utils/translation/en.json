@@ -1327,6 +1327,7 @@
   "Favicon": "Favicon",
   "EnableDeliveries": "Enable Deliveries",
   "EnableOrders": "Enable Orders",
+  "EnablePrivateCustomers": "Allow Private Customers Login",
   "UpdateStatus": "Update Status",
   "UpdateStatusDescription": "Status update (name, phone, status)",
   "AddStatus": "Add Status",

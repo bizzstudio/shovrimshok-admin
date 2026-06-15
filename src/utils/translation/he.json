@@ -1363,6 +1363,7 @@
   "Favicon": "(אינטרנט) אייקון קטן המופיע לצד שם האתר בדפדפן",
   "EnableDeliveries": "פתיחת/סגירת משלוחים",
   "EnableOrders": "פתיחת/סגירת אתר",
+  "EnablePrivateCustomers": "אפשר התחברות לקוחות פרטיים",
   "UpdateStatus": "עדכון מלקט",
   "UpdateStatusDescription": "עדכון מלקט (שם, טלפון, סטטוס)",
   "AddStatus": "הוספת סטטוס",

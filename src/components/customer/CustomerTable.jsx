@@ -39,7 +39,7 @@ const CustomerTable = ({ customers, handleModalOpen }) => {
     <TableBody>
       {safeCustomers?.map((mainCustomer) => {
         const subCustomers = Array.isArray(mainCustomer?.subCustomers)
-          ? mainCustomer.subCustomers
+          ? mainCustomer.subCustomers.filter((sc) => !sc?.isPrimary)
           : [];
         const isExpanded = expanded.has(mainCustomer._id);
 

@@ -2,15 +2,14 @@
 import React, { useContext } from "react";
 import { Card, CardBody, Button, Select } from "@windmill/react-ui";
 import { useTranslation } from "react-i18next";
-import { BiSolidUserDetail, BiMap } from "react-icons/bi";
+import { BiSolidUserDetail } from "react-icons/bi";
 import { FiPlus, FiTrash2, FiUsers } from "react-icons/fi";
 
 // Internal import
 import InputArea from "@/components/form/input/InputArea";
 import LabelArea from "@/components/form/selectOption/LabelArea";
 import Error from "@/components/form/others/Error";
-import ProfileImageUploader from "@/components/image-uploader/ProfileImageUploader";
-import City from "@/components/select/City";
+import SubCustomerCard from "@/components/customer/SubCustomerCard";
 import useCustomerSubmit from "@/hooks/useCustomerSubmit";
 import { SidebarContext } from "@/context/SidebarContext";
 
@@ -33,6 +32,7 @@ const CustomerPersonalDetails = ({ customer, customerId }) => {
         appendSubCustomer,
         removeSubCustomer,
         isBusinessOrInstitutional,
+        hasVisibleSubCustomers,
     } = useCustomerSubmit(customerId, customer);
 
     return (
@@ -100,15 +100,17 @@ const CustomerPersonalDetails = ({ customer, customerId }) => {
                                     <Error errorName={errors.phone} />
                                 </div>
 
-                                {/* סוג לקוח – ברירת מחדל: לקוח מוסדי בלבד */}
+                                {/* סוג לקוח */}
                                 <div className="flex flex-col">
                                     <LabelArea label={t("CustomerType")} />
                                     <Select
                                         {...register("customerType", {
                                             required: `${t("CustomerType")} ${t("isRequired")}!`,
                                         })}
-                                        disabled
                                     >
+                                        <option value="casual">{t("CasualCustomer")}</option>
+                                        <option value="regular">{t("RegularCustomer")}</option>
+                                        <option value="business">{t("BusinessCustomer")}</option>
                                         <option value="institutional">{t("InstitutionalCustomer")}</option>
                                     </Select>
                                     <Error errorName={errors.customerType} />
@@ -198,7 +200,25 @@ const CustomerPersonalDetails = ({ customer, customerId }) => {
                                 </div>
                             </div>
 
-                            {/* סעיף תת-לקוחות */}
+                            {/* שדות ה-primary (כתובת/אשראי/אזעקה/יום אספקה/סיסמה) - מוצגים כשדות של הלקוח הראשי
+                                כשאין תתי-לקוחות גלויים. ברגע שמוסיפים תת-לקוח גלוי - השדות נעלמים מכאן. */}
+                            {!hasVisibleSubCustomers && (
+                                <div className="pt-2">
+                                    <SubCustomerCard
+                                        prefix="primaryDetails"
+                                        register={register}
+                                        errors={errors}
+                                        watch={watch}
+                                        setValue={setValue}
+                                        isNewCustomer={isNewCustomer}
+                                        customerType={customerType}
+                                        hideNameEmailPhone={true}
+                                        hideImage={true}
+                                    />
+                                </div>
+                            )}
+
+                            {/* סעיף תת-לקוחות גלויים */}
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between gap-3 pb-4 border-b border-gray-200 dark:border-gray-700">
                                     <div className="flex items-center gap-3">
@@ -222,10 +242,9 @@ const CustomerPersonalDetails = ({ customer, customerId }) => {
                                     )}
                                 </div>
 
-                                {/* רשימת כרטיסי תת-לקוח */}
+                                {/* רשימת כרטיסי תת-לקוח גלויים */}
                                 <div className="space-y-4">
                                     {subCustomerFields.map((field, idx) => {
-                                        const addressCity = watch(`subCustomers.${idx}.address.city`);
                                         const subName = watch(`subCustomers.${idx}.name`);
                                         const subLastName = watch(`subCustomers.${idx}.lastName`);
                                         const displayName = [subName, subLastName].filter(Boolean).join(" ").trim()
@@ -241,7 +260,7 @@ const CustomerPersonalDetails = ({ customer, customerId }) => {
                                                         {displayName}
                                                     </div>
 
-                                                    {isBusinessOrInstitutional && subCustomerFields.length > 1 && (
+                                                    {isBusinessOrInstitutional && (
                                                         <button
                                                             type="button"
                                                             onClick={() => removeSubCustomer(idx)}
@@ -255,282 +274,15 @@ const CustomerPersonalDetails = ({ customer, customerId }) => {
                                                     )}
                                                 </div>
 
-                                                <div className="flex xl:flex-row flex-col gap-4 md:gap-10 md:items-start">
-                                                    {/* תמונת תת-לקוח */}
-                                                    <div className="flex justify-center">
-                                                        <ProfileImageUploader
-                                                            imageUrl={watch(`subCustomers.${idx}.image`)}
-                                                            setImageUrl={(url) =>
-                                                                setValue(`subCustomers.${idx}.image`, url, { shouldDirty: true })
-                                                            }
-                                                            folder="shovrimshok customers"
-                                                            size="medium"
-                                                        />
-                                                    </div>
-
-                                                    {/* שדות תת-לקוח: שם, משפחה, אימייל וכו' */}
-                                                    <div className="w-full space-y-6">
-                                                        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                                            {/* שם פרטי */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={t("Name")} />
-                                                                <InputArea
-                                                                    register={register}
-                                                                    label={t("Name")}
-                                                                    name={`subCustomers.${idx}.name`}
-                                                                    type="text"
-                                                                    placeholder={t("CustomerNamePlaceholder")}
-                                                                    isRequired={true}
-                                                                    autocomplete={isNewCustomer ? "off" : undefined}
-                                                                />
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.name} />
-                                                            </div>
-
-                                                            {/* שם משפחה */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={t("Last Name")} />
-                                                                <InputArea
-                                                                    register={register}
-                                                                    label={t("Last Name")}
-                                                                    name={`subCustomers.${idx}.lastName`}
-                                                                    type="text"
-                                                                    placeholder={t("CustomerLastNamePlaceholder")}
-                                                                    isRequired={false}
-                                                                    autocomplete={isNewCustomer ? "off" : undefined}
-                                                                />
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.lastName} />
-                                                            </div>
-
-                                                            {/* אימייל */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={t("Email")} />
-                                                                <InputArea
-                                                                    register={register}
-                                                                    label={t("Email")}
-                                                                    name={`subCustomers.${idx}.email`}
-                                                                    type="email"
-                                                                    placeholder={t("CustomerEmailPlaceholder")}
-                                                                    isRequired={true}
-                                                                    autocomplete={isNewCustomer ? "section-new-customer email" : undefined}
-                                                                />
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.email} />
-                                                            </div>
-
-                                                            {/* טלפון */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={t("Phone")} />
-                                                                <InputArea
-                                                                    register={register}
-                                                                    label={t("Phone")}
-                                                                    name={`subCustomers.${idx}.phone`}
-                                                                    type="tel"
-                                                                    placeholder={t("CustomerPhonePlaceholder")}
-                                                                    isRequired={false}
-                                                                    autocomplete={isNewCustomer ? "off" : undefined}
-                                                                />
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.phone} />
-                                                            </div>
-
-                                                            {/* מספר לקוח בריווחית (תת-לקוח) */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={t("RivhitCustomerNumber") || "Rivhit customer number"} />
-                                                                <InputArea
-                                                                    register={register}
-                                                                    label={t("RivhitCustomerNumber") || "Rivhit customer number"}
-                                                                    name={`subCustomers.${idx}.rivhitCustomerNumber`}
-                                                                    type="text"
-                                                                    placeholder="12345"
-                                                                    isRequired={false}
-                                                                    autocomplete={isNewCustomer ? "off" : undefined}
-                                                                />
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.rivhitCustomerNumber} />
-                                                            </div>
-
-                                                            {/* מסגרת אשראי */}
-                                                            {customerType !== "casual" && (
-                                                                <div className="flex flex-col">
-                                                                    <LabelArea label={t("CreditLimit")} />
-                                                                    <InputArea
-                                                                        register={register}
-                                                                        label={t("CreditLimit")}
-                                                                        name={`subCustomers.${idx}.creditLimit`}
-                                                                        type="number"
-                                                                        min={0}
-                                                                        placeholder={t("CreditLimitPlaceholder")}
-                                                                        isRequired={false}
-                                                                        autocomplete={isNewCustomer ? "off" : undefined}
-                                                                    />
-                                                                    <Error errorName={errors?.subCustomers?.[idx]?.creditLimit} />
-                                                                </div>
-                                                            )}
-
-                                                            {/* סכום להתראה */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={t("AlertAmount")} />
-                                                                <InputArea
-                                                                    register={register}
-                                                                    label={t("AlertAmount")}
-                                                                    name={`subCustomers.${idx}.alertAmount`}
-                                                                    type="number"
-                                                                    min={0}
-                                                                    placeholder="1000"
-                                                                    isRequired={false}
-                                                                    autocomplete={isNewCustomer ? "off" : undefined}
-                                                                />
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.alertAmount} />
-                                                            </div>
-
-                                                            {/* תקופת התראה */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={t("AlertPeriod")} />
-                                                                <Select {...register(`subCustomers.${idx}.alertPeriod`)}>
-                                                                    <option value="" disabled hidden>{t("AlertPeriodPlaceholder")}</option>
-                                                                    <option value="weekly">{t("Weekly")}</option>
-                                                                    <option value="monthly">{t("Monthly")}</option>
-                                                                </Select>
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.alertPeriod} />
-                                                            </div>
-
-                                                            {/* יום משלוח שבועי */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={t("WeeklyDeliveryDay")} />
-                                                                <Select {...register(`subCustomers.${idx}.weeklyDeliveryDay`)}>
-                                                                    <option value="">{t("WeeklyDeliveryDayPlaceholder")}</option>
-                                                                    <option value="0">{t("DaySunday")}</option>
-                                                                    <option value="1">{t("DayMonday")}</option>
-                                                                    <option value="2">{t("DayTuesday")}</option>
-                                                                    <option value="3">{t("DayWednesday")}</option>
-                                                                    <option value="4">{t("DayThursday")}</option>
-                                                                    <option value="5">{t("DayFriday")}</option>
-                                                                    <option value="6">{t("DaySaturday")}</option>
-                                                                </Select>
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.weeklyDeliveryDay} />
-                                                            </div>
-
-                                                            {/* סיסמה (אופציונלי/חדשה) */}
-                                                            <div className="flex flex-col">
-                                                                <LabelArea label={isNewCustomer ? t("PasswordOptional") : t("NewPassword")} />
-                                                                <InputArea
-                                                                    register={register}
-                                                                    label={isNewCustomer ? t("PasswordOptional") : t("NewPassword")}
-                                                                    name={`subCustomers.${idx}.newPassword`}
-                                                                    type="password"
-                                                                    placeholder={isNewCustomer ? t("NewPasswordPlaceholderCreate") : t("NewPasswordPlaceholderUpdate")}
-                                                                    isRequired={false}
-                                                                    autocomplete="section-new-customer new-password"
-                                                                />
-                                                                <Error errorName={errors?.subCustomers?.[idx]?.newPassword} />
-                                                            </div>
-                                                        </div>
-
-                                                        {/* כתובת מלאה */}
-                                                        <div className="space-y-4">
-                                                            <div className="flex items-center gap-3 pb-3 border-b border-gray-200 dark:border-gray-700">
-                                                                <BiMap size={22} className="text-mainColor" />
-                                                                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                                                                    {t("FullAddress")}
-                                                                </h3>
-                                                            </div>
-
-                                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                                                {/* עיר */}
-                                                                <div className="flex flex-col">
-                                                                    <LabelArea label={t("City")} />
-                                                                    <City
-                                                                        value={addressCity}
-                                                                        setValue={(val) =>
-                                                                            setValue(`subCustomers.${idx}.address.city`, val, { shouldDirty: true })
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                                {/* רחוב */}
-                                                                <div className="flex flex-col">
-                                                                    <LabelArea label={t("Street")} />
-                                                                    <InputArea
-                                                                        register={register}
-                                                                        label={t("Street")}
-                                                                        name={`subCustomers.${idx}.address.street`}
-                                                                        type="text"
-                                                                        placeholder={t("StreetPlaceholder")}
-                                                                        isRequired={false}
-                                                                        autocomplete={isNewCustomer ? "off" : undefined}
-                                                                    />
-                                                                    <Error errorName={errors?.subCustomers?.[idx]?.address?.street} />
-                                                                </div>
-                                                                {/* מספר בית */}
-                                                                <div className="flex flex-col">
-                                                                    <LabelArea label={t("HouseNumber")} />
-                                                                    <InputArea
-                                                                        register={register}
-                                                                        label={t("HouseNumber")}
-                                                                        name={`subCustomers.${idx}.address.houseNumber`}
-                                                                        type="text"
-                                                                        placeholder={t("HouseNumberPlaceholder")}
-                                                                        isRequired={false}
-                                                                        autocomplete={isNewCustomer ? "off" : undefined}
-                                                                    />
-                                                                    <Error errorName={errors?.subCustomers?.[idx]?.address?.houseNumber} />
-                                                                </div>
-                                                                {/* מספר דירה */}
-                                                                <div className="flex flex-col">
-                                                                    <LabelArea label={t("ApartmentNumber")} />
-                                                                    <InputArea
-                                                                        register={register}
-                                                                        label={t("ApartmentNumber")}
-                                                                        name={`subCustomers.${idx}.address.apartmentNumber`}
-                                                                        type="text"
-                                                                        placeholder={t("ApartmentNumberPlaceholder")}
-                                                                        isRequired={false}
-                                                                        autocomplete={isNewCustomer ? "off" : undefined}
-                                                                    />
-                                                                    <Error errorName={errors?.subCustomers?.[idx]?.address?.apartmentNumber} />
-                                                                </div>
-                                                                {/* קומה */}
-                                                                <div className="flex flex-col">
-                                                                    <LabelArea label={t("Floor")} />
-                                                                    <InputArea
-                                                                        register={register}
-                                                                        label={t("Floor")}
-                                                                        name={`subCustomers.${idx}.address.floor`}
-                                                                        type="text"
-                                                                        placeholder={t("FloorPlaceholder")}
-                                                                        isRequired={false}
-                                                                        autocomplete={isNewCustomer ? "off" : undefined}
-                                                                    />
-                                                                    <Error errorName={errors?.subCustomers?.[idx]?.address?.floor} />
-                                                                </div>
-                                                                {/* קוד כניסה */}
-                                                                <div className="flex flex-col">
-                                                                    <LabelArea label={t("EntryCode")} />
-                                                                    <InputArea
-                                                                        register={register}
-                                                                        label={t("EntryCode")}
-                                                                        name={`subCustomers.${idx}.address.entryCode`}
-                                                                        type="text"
-                                                                        placeholder={t("EntryCodePlaceholder")}
-                                                                        isRequired={false}
-                                                                        autocomplete={isNewCustomer ? "off" : undefined}
-                                                                    />
-                                                                    <Error errorName={errors?.subCustomers?.[idx]?.address?.entryCode} />
-                                                                </div>
-                                                                {/* מיקוד */}
-                                                                <div className="flex flex-col">
-                                                                    <LabelArea label={t("PostalCode")} />
-                                                                    <InputArea
-                                                                        register={register}
-                                                                        label={t("PostalCode")}
-                                                                        name={`subCustomers.${idx}.address.postalCode`}
-                                                                        type="text"
-                                                                        placeholder={t("PostalCodePlaceholder")}
-                                                                        isRequired={false}
-                                                                        autocomplete={isNewCustomer ? "off" : undefined}
-                                                                    />
-                                                                    <Error errorName={errors?.subCustomers?.[idx]?.address?.postalCode} />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <SubCustomerCard
+                                                    prefix={`subCustomers.${idx}`}
+                                                    register={register}
+                                                    errors={errors}
+                                                    watch={watch}
+                                                    setValue={setValue}
+                                                    isNewCustomer={isNewCustomer}
+                                                    customerType={customerType}
+                                                />
                                             </div>
                                         );
                                     })}

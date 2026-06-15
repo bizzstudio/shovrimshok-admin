@@ -20,6 +20,7 @@ const useStoreSettingSubmit = (id) => {
   const [enabledGoogleAnalytics, setEnabledGoogleAnalytics] = useState(false);
   const [enabledDeliveries, setEnabledDeliveries] = useState(true);
   const [enabledOrders, setEnabledOrders] = useState(true);
+  const [enabledPrivateCustomers, setEnabledPrivateCustomers] = useState(true);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -42,6 +43,8 @@ const useStoreSettingSubmit = (id) => {
           delivery_status: enabledDeliveries,
           // אופציה להזמנות
           optionToOrder_status: enabledOrders,
+          // אפשר ללקוחות פרטיים (casual) להתחבר ולרכוש
+          enable_private_customers: enabledPrivateCustomers,
 
           cod_status: enabledCOD,
           stripe_status: enabledStripe,
@@ -110,6 +113,8 @@ const useStoreSettingSubmit = (id) => {
           setEnabledDeliveries(res.delivery_status);
           // אופציה להזמנות
           setEnabledOrders(res.optionToOrder_status);
+          // אפשר ללקוחות פרטיים (ברירת מחדל true - לא נשבר עבור פריסות קיימות)
+          setEnabledPrivateCustomers(res.enable_private_customers !== false);
         }
       } catch (err) {
         notifyError(err?.response?.data?.message || err.message);
@@ -144,6 +149,8 @@ const useStoreSettingSubmit = (id) => {
     setEnabledDeliveries,
     enabledOrders,
     setEnabledOrders,
+    enabledPrivateCustomers,
+    setEnabledPrivateCustomers,
   };
 };
 
